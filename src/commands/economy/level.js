@@ -1,9 +1,4 @@
-const {
-    Client,
-    Interaction,
-    ApplicationCommandOptionType,
-    AttachmentBuilder,
-  } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, AttachmentBuilder } = require('discord.js');
   const { RankCardBuilder, Font } = require('canvacord');
   const calculateLevelXp = require('../../utils/calculateLevelXp');
   const Level = require('../../models/Level');

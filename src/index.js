@@ -30,6 +30,7 @@ const client = new Client({
   
       client.user.setActivity({
           name: 'Ezzat at your service',
+          // type: ActivityType.Watching,
         });
   })
   } catch (error) {

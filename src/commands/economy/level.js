@@ -10,7 +10,7 @@ const { Client, Interaction, ApplicationCommandOptionType, AttachmentBuilder } =
      * @param {Interaction} interaction
      */
     callback: async (client, interaction) => {
-      if (!interaction.inGuild()) {
+      if (!interaction.inGuild()) { //checking if the user running the command inside a guild or not
         interaction.reply('You can only run this command inside a server.');
         return;
       }
@@ -21,12 +21,12 @@ const { Client, Interaction, ApplicationCommandOptionType, AttachmentBuilder } =
       const targetUserId = mentionedUserId || interaction.member.id;
       const targetUserObj = await interaction.guild.members.fetch(targetUserId);
   
-      const fetchedLevel = await Level.findOne({
+      const fetchedLevel = await Level.findOne({ // fetching the user's level
         userId: targetUserId,
         guildId: interaction.guild.id,
       });
   
-      if (!fetchedLevel) {
+      if (!fetchedLevel) { // if the user never used the command before he doesn't have a profile
         interaction.editReply(
           mentionedUserId
             ? `${targetUserObj.user.username} doesn't have any levels yet. Try again when they chat a little more.`

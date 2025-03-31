@@ -2,6 +2,8 @@ const { Client, InteractionCollector, PermissionFlagsBits } = require('discord.j
 const AutoRole = require('../../models/AutoRole');
 const { permissionRequied } = require('./autorole-configure');
 
+
+// Disabling the auto-role for the server
 module.exports = {
     /**
      * 

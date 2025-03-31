@@ -1,6 +1,8 @@
 const { ApplicationCommandOptionType, Client, Interaction, PermissionFlagsBits } = require('discord.js');
 const AutoRole = require('../../models/AutoRole');
 
+
+// Configuring the auto-role for the server
 module.exports = {
   /**
    *

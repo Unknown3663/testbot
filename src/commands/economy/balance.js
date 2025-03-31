@@ -8,7 +8,7 @@ module.exports = {
    * @param {Interaction} interaction
    */
   callback: async (client, interaction) => {
-    if (!interaction.inGuild()) {
+    if (!interaction.inGuild()) {  // checking if the user running the command inside a guild or not
       interaction.reply({
         content: 'You can only run this command inside a server.',
         ephemeral: true,
@@ -22,12 +22,12 @@ module.exports = {
 
     const user = await User.findOne({ userId: targetUserId, guildId: interaction.guild.id });
 
-    if (!user) {
+    if (!user) { // if the user never used the command before he doesn't have a profile
       interaction.editReply(`<@${targetUserId}> doesn't have a profile yet.`);
       return;
     }
 
-    interaction.editReply(
+    interaction.editReply( // if the user has a profile then show his balance
       targetUserId === interaction.member.id
         ? `Your balance is **${user.balance}**`
         : `<@${targetUserId}>'s balance is **${user.balance}**`

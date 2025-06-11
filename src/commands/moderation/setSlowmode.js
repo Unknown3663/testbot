@@ -4,6 +4,7 @@ const {
   ApplicationCommandOptionType,
   PermissionFlagsBits,
   ChannelType,
+  MessageFlags,
 } = require("discord.js");
 const ms = require("ms");
 
@@ -20,7 +21,7 @@ module.exports = {
     ) {
       return interaction.reply({
         content: "🚫 You do not have permission to use this command.",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
 
@@ -31,7 +32,7 @@ module.exports = {
       await interaction.reply({
         content:
           "❌ Please provide a valid duration like `5s`, `1m`, `10m`, `1h`.",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
@@ -39,7 +40,7 @@ module.exports = {
     if (seconds < 0 || seconds > 21600) {
       await interaction.reply({
         content: "⚠️ Duration must be between `0s` and `6h` (21600 seconds).",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
@@ -49,7 +50,7 @@ module.exports = {
     if (channel.type !== ChannelType.GuildText) {
       await interaction.reply({
         content: "❌ This command only works in text channels.",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
@@ -66,7 +67,7 @@ module.exports = {
       console.error("Error setting slowmode:", err);
       await interaction.reply({
         content: "❌ Failed to set slowmode. Please check my permissions.",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
   },

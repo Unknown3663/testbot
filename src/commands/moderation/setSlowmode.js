@@ -14,8 +14,17 @@ module.exports = {
    * @param {Interaction} interaction
    */
   callback: async (client, interaction) => {
-    const durationInput = interaction.options.get("duration").value;
+    // Check if the user has ManageChannels permission
+    if (
+      !interaction.member.permissions.has(PermissionFlagsBits.ManageChannels)
+    ) {
+      return interaction.reply({
+        content: "🚫 You do not have permission to use this command.",
+        ephemeral: true,
+      });
+    }
 
+    const durationInput = interaction.options.get("duration").value;
     const seconds = ms(durationInput) / 1000;
 
     if (isNaN(seconds)) {

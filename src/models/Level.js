@@ -1,5 +1,5 @@
-const { Schema, model } = require('mongoose');
- 
+const { Schema, model } = require("mongoose");
+
 const levelSchema = new Schema({
   userId: {
     type: String,
@@ -16,7 +16,7 @@ const levelSchema = new Schema({
   level: {
     type: Number,
     default: 0,
-  }
+  },
 });
 
-module.exports = model('Level', levelSchema);
+module.exports = model("Level", levelSchema);

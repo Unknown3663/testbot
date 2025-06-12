@@ -1,23 +1,23 @@
-const { Guild } = require('discord.js');
-const { Schema, model } = require('mongoose');
+const { Guild } = require("discord.js");
+const { Schema, model } = require("mongoose");
 
 const warningSchema = new Schema({
-    GuildID: {
-        type: String,
-        required: true,
-    },
-    UserID: {
-        type: String,
-        required: true,
-    },
-    UserTag: {
-        type: String,
-        required: true,
-    },
-    Content: {
-        type: Array,
-        required: true,
-    }
+  GuildID: {
+    type: String,
+    required: true,
+  },
+  UserID: {
+    type: String,
+    required: true,
+  },
+  UserTag: {
+    type: String,
+    required: true,
+  },
+  Content: {
+    type: Array,
+    required: true,
+  },
 });
 
-module.exports = model('warnSchema', warningSchema);
+module.exports = model("warnSchema", warningSchema);

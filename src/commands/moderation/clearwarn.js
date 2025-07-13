@@ -30,8 +30,8 @@ module.exports = {
     )
       return interaction.reply({
         content:
-          "You do not have the required permissions to clear people's warnings.",
-        Flags: MessageFlags.Ephemeral,
+          "❌ You do not have the required permissions to clear people's warnings.",
+        flags: MessageFlags.Ephemeral,
       });
 
     const { options, guildId } = interaction;
@@ -66,7 +66,7 @@ module.exports = {
       console.error(`Error clearing warning: ${err}`);
       interaction.reply({
         content: "An error occurred while clearing the warning.",
-        Flags: MessageFlags.Ephemeral,
+        flags: MessageFlags.Ephemeral,
       });
     }
   },

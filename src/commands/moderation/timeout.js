@@ -3,6 +3,7 @@ const {
   Interaction,
   ApplicationCommandOptionType,
   PermissionFlagsBits,
+  MessageFlags,
 } = require("discord.js");
 const ms = require("ms");
 
@@ -14,6 +15,28 @@ module.exports = {
    */
 
   callback: async (client, interaction) => {
+    // Check if user has permission to timeout members
+    if (
+      !interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers)
+    ) {
+      return interaction.reply({
+        content: "❌ You don't have permission to timeout members!",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
+    // Check if bot has permission to timeout members
+    if (
+      !interaction.guild.members.me.permissions.has(
+        PermissionFlagsBits.ModerateMembers
+      )
+    ) {
+      return interaction.reply({
+        content: "❌ I don't have permission to timeout members!",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     const mentionable = interaction.options.get("target-user").value;
     const duration = interaction.options.get("duration").value; // 1d, 1 day, 1s 5s, 5m
     const reason =

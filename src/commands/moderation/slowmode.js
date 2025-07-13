@@ -15,15 +15,28 @@ module.exports = {
    * @param {Interaction} interaction
    */
   callback: async (client, interaction) => {
-    // Remove this permission check since it's handled in handleCommands.js
-    // if (
-    //   !interaction.member.permissions.has(PermissionFlagsBits.ManageChannels)
-    // ) {
-    //   return interaction.reply({
-    //     content: "🚫 You do not have permission to use this command.",
-    //     flags: MessageFlags.Ephemeral,
-    //   });
-    // }
+    // Check if user has permission to manage channels
+    if (
+      !interaction.member.permissions.has(PermissionFlagsBits.ManageChannels)
+    ) {
+      return interaction.reply({
+        content:
+          "❌ You do not have permission to manage slowmode in channels.",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
+    // Check if bot has permission to manage channels
+    if (
+      !interaction.guild.members.me.permissions.has(
+        PermissionFlagsBits.ManageChannels
+      )
+    ) {
+      return interaction.reply({
+        content: "❌ I do not have permission to manage channels.",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
 
     const durationInput = interaction.options.get("duration").value;
     const seconds = ms(durationInput) / 1000;

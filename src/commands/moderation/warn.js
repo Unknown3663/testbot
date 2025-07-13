@@ -35,8 +35,8 @@ module.exports = {
       !interaction.member.permissions.has(PermissionsBitField.Flags.KickMembers)
     )
       return interaction.reply({
-        content: "You do not have the required permissions to warn users.",
-        Flags: MessageFlags.Ephemeral,
+        content: "❌ You do not have the required permissions to warn users.",
+        flags: MessageFlags.Ephemeral,
       });
 
     const { options, guildId } = interaction;

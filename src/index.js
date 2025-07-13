@@ -13,6 +13,17 @@ const client = new Client({
   ],
 });
 
+// Register the ready event handler before login
+client.on("ready", (c) => {
+  console.log(`✅ ${client.user.tag} is online`);
+
+  // setting the bot activity
+  client.user.setActivity({
+    name: "Ezzat at your service",
+    // type: ActivityType.Watching,
+  });
+});
+
 (async () => {
   try {
     // connecting to the mongo database
@@ -23,17 +34,7 @@ const client = new Client({
     eventHandler(client);
 
     // logging in to the bot token
-    client.login(process.env.TOKEN);
-
-    client.on("ready", (c) => {
-      console.log(`✅ ${client.user.tag} is online`);
-
-      // setting the bot activity
-      client.user.setActivity({
-        name: "Ezzat at your service",
-        // type: ActivityType.Watching,
-      });
-    });
+    await client.login(process.env.TOKEN);
   } catch (error) {
     console.log(`Error: ${error}`);
   }

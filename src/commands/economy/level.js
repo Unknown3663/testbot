@@ -1,8 +1,10 @@
+const path = require("path");
 const {
   Client,
   Interaction,
   ApplicationCommandOptionType,
   AttachmentBuilder,
+  MessageFlags,
 } = require("discord.js");
 const { RankCardBuilder, Font } = require("canvacord");
 const calculateLevelXp = require("../../utils/calculateLevelXp");
@@ -17,7 +19,10 @@ module.exports = {
   callback: async (client, interaction) => {
     if (!interaction.inGuild()) {
       //checking if the user running the command inside a guild or not
-      interaction.reply("You can only run this command inside a server.");
+      interaction.reply({
+        content: "You can only run this command inside a server.",
+        flags: MessageFlags.Ephemeral,
+      });
       return;
     }
 
@@ -78,8 +83,7 @@ module.exports = {
       })
       .setUsername(targetUserObj.user.username)
       .setStatus(targetUserObj.presence?.status || "offline")
-      .setBackground("images/CardBackGround.png")
-      .setBackgroundCrop("images/CardBackGround.png")
+      .setBackground(path.join(__dirname, "../../../images/CardBackGround.png"))
       .setDisplayName(targetUserObj.user.displayName);
 
     const data = await rank.build();

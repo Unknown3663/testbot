@@ -65,7 +65,7 @@ module.exports = {
       console.error(err);
       interaction.reply({
         content: "An error occurred while fetching warnings.",
-        Flags: MessageFlags.Ephemeral,
+        flags: MessageFlags.Ephemeral,
       });
     }
   },

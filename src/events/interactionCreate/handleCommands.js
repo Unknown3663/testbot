@@ -34,31 +34,7 @@ module.exports = async (client, interaction) => {
       }
     }
 
-    if (commandObject.permissionsRequired?.length) {
-      for (const permission of commandObject.permissionsRequired) {
-        if (!interaction.member.permissions.has(permission)) {
-          interaction.reply({
-            content: "Not enough permissions.",
-            flags: MessageFlags.Ephemeral,
-          });
-          return;
-        }
-      }
-    }
-
-    if (commandObject.botPermissions?.length) {
-      for (const permission of commandObject.botPermissions) {
-        const bot = interaction.guild.members.me;
-
-        if (!bot.permissions.has(permission)) {
-          interaction.reply({
-            content: "I don't have enough permissions.",
-            flags: MessageFlags.Ephemeral,
-          });
-          return;
-        }
-      }
-    }
+    // Permission checks are handled individually by each command
 
     await commandObject.callback(client, interaction);
   } catch (error) {

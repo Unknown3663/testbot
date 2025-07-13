@@ -17,7 +17,7 @@ module.exports = {
       // checking if the user running the command inside a guild or not
       interaction.reply({
         content: "You can only run this command inside a server.",
-        Flags: MessageFlags.Ephemeral,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }

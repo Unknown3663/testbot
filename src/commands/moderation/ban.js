@@ -3,6 +3,7 @@ const {
   interaction,
   ApplicationCommandOptionType,
   PermissionFlagsBits,
+  MessageFlags,
 } = require("discord.js");
 
 module.exports = {
@@ -13,6 +14,26 @@ module.exports = {
    */
 
   callback: async (client, interaction) => {
+    // Check if user has permission to ban members
+    if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
+      return interaction.reply({
+        content: "❌ You don't have permission to ban members!",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
+    // Check if bot has permission to ban members
+    if (
+      !interaction.guild.members.me.permissions.has(
+        PermissionFlagsBits.BanMembers
+      )
+    ) {
+      return interaction.reply({
+        content: "❌ I don't have permission to ban members!",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     const targetUserId = interaction.options.get("target-user").value;
     const reason =
       interaction.options.get("reason")?.value || "no reason provided";

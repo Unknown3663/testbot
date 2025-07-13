@@ -37,11 +37,13 @@ module.exports = async (client, message) => {
       userLevel.xp += xpToGive;
 
       if (userLevel.xp >= calculateLevelXp(userLevel.level)) {
+        const previousLevel = userLevel.level; // Store the previous level
         userLevel.xp = 0;
         userLevel.level += 1;
 
+        // Enhanced level-up message with emojis and congratulations
         message.channel.send(
-          `${message.member} you have leveled up to **level ${userLevel.level}**.`
+          `🎉 **Congratulations** ${message.member}! 🎉\n✨ You've leveled up from **Level ${previousLevel}** to **Level ${userLevel.level}**! ✨\n🚀 Keep up the great work! 🌟`
         );
       }
 

@@ -3,5 +3,3 @@ node_modules
 .DS_Store
 .vs
 dist
-TYPESCRIPT_MIGRATION.md
-CONVERSION_COMPLETE.md

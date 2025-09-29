@@ -18,4 +18,3 @@ const logMessageCount = (): void => {
 };
 
 // immediately start the interval when the file is loaded
-// logMessageCount();

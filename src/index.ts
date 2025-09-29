@@ -21,7 +21,6 @@ client.on("clientReady", (c) => {
   // setting the bot activity
   client.user?.setActivity({
     name: "Ezzat at your service",
-    // type: ActivityType.Watching,
   });
 });
 

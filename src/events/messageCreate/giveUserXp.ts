@@ -54,11 +54,8 @@ export default async function giveUserXp(
       setTimeout(() => {
         cooldowns.delete(message.author.id);
       }, 30000);
-    }
-
-    // if (!level)
-    else {
-      //create new level
+    } else {
+      // Create new level
       const newLevel = new Level({
         userId: message.author.id,
         guildId: message.guild?.id,

@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import { readdirSync } from "fs";
+import { join } from "path";
 
 export default function getAllFiles(
   directory: string,
@@ -7,10 +7,10 @@ export default function getAllFiles(
 ): string[] {
   let fileNames: string[] = [];
 
-  const files = fs.readdirSync(directory, { withFileTypes: true });
+  const files = readdirSync(directory, { withFileTypes: true });
 
   for (const file of files) {
-    const filePath = path.join(directory, file.name);
+    const filePath = join(directory, file.name);
 
     if (foldersOnly) {
       if (file.isDirectory()) {

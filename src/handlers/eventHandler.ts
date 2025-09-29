@@ -1,9 +1,9 @@
-import path from "path";
+import { join } from "path";
 import getAllFiles from "../utils/getAllFiles";
 import { BotClient } from "../types";
 
 export default function eventHandler(client: BotClient): void {
-  const eventFolders = getAllFiles(path.join(__dirname, "..", "events"), true);
+  const eventFolders = getAllFiles(join(__dirname, "..", "events"), true);
 
   for (const eventFolder of eventFolders) {
     const eventFiles = getAllFiles(eventFolder).filter(

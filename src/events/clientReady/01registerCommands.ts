@@ -1,3 +1,4 @@
+import { join } from "path";
 import config from "../../../config.json";
 import areCommandsDifferent from "../../utils/areCommandsDifferent";
 import getApplicationCommands from "../../utils/getApplicationCommands";

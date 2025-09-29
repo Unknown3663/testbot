@@ -1,7 +1,6 @@
 import {
   ApplicationCommandOptionType,
   Client,
-  Interaction,
   PermissionFlagsBits,
   MessageFlags,
   ChatInputCommandInteraction,

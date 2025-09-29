@@ -1,11 +1,11 @@
-import path from "path";
+import { join } from "path";
 import getAllFiles from "./getAllFiles";
 
 export default function getLocalCommands(exceptions: string[] = []): any[] {
   let localCommands: any[] = [];
 
   const commandCategories = getAllFiles(
-    path.join(__dirname, "..", "commands"),
+    join(__dirname, "..", "commands"),
     true
   );
 

@@ -7,7 +7,6 @@ import {
   ChatInputCommandInteraction,
   TextChannel,
   PermissionFlagsBits,
-  GuildMemberRoleManager,
 } from "discord.js";
 
 interface Command {

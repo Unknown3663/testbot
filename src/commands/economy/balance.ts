@@ -25,9 +25,12 @@ export default {
 
     await interaction.deferReply();
 
+    const guildId = interaction.guild?.id;
+    if (!guildId) return;
+
     const user = await User.findOne({
-      userId: targetUserId,
-      guildId: interaction.guild?.id,
+      userId: String(targetUserId),
+      guildId,
     });
 
     if (!user) {

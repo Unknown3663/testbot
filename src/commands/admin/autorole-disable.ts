@@ -43,14 +43,17 @@ const command: Command = {
     try {
       await interaction.deferReply();
 
-      if (!(await AutoRole.exists({ guildId: interaction.guild?.id }))) {
+      const guildId = interaction.guild?.id;
+      if (!guildId) return;
+
+      if (!(await AutoRole.exists({ guildId }))) {
         await interaction.editReply(
           "Auto role has not been configured for this server. Use `/autorole-configure` to set it up."
         );
         return;
       }
 
-      await AutoRole.findOneAndDelete({ guildId: interaction.guild?.id });
+      await AutoRole.findOneAndDelete({ guildId });
       await interaction.editReply(
         "auto role has been disabled for this server. Use `/autorole-configure` to set it again."
       );

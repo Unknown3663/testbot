@@ -38,10 +38,13 @@ export default {
       return;
     }
 
+    const guildId = interaction.guild?.id;
+    if (!guildId) return;
+
     const fetchedLevel = await Level.findOne({
       // fetching the user's level
-      userId: targetUserId,
-      guildId: interaction.guild?.id,
+      userId: targetUserId as string,
+      guildId,
     });
 
     if (!fetchedLevel) {
@@ -54,7 +57,7 @@ export default {
       return;
     }
 
-    let allLevels = await Level.find({ guildId: interaction.guild?.id }).select(
+    let allLevels = await Level.find({ guildId }).select(
       "-_id userId level xp"
     );
 

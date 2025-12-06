@@ -24,9 +24,12 @@ export default async function giveUserXp(
 
   const xpToGive = getRandomXp(5, 15);
 
+  const guildId = message.guild?.id;
+  if (!guildId) return;
+
   const query = {
     userId: message.author.id,
-    guildId: message.guild?.id || "",
+    guildId,
   };
 
   try {

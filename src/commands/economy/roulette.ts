@@ -39,10 +39,12 @@ export default {
     try {
       const betAmount = interaction.options.getInteger("bet") as number;
 
-      const query = {
-        userId: interaction.member?.user.id || "",
-        guildId: interaction.guild?.id || "",
-      };
+      const userId = interaction.member?.user.id;
+      const guildId = interaction.guild?.id;
+
+      if (!userId || !guildId) return;
+
+      const query = { userId, guildId };
 
       let user = await User.findOne(query);
 

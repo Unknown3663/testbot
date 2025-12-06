@@ -2,7 +2,10 @@ import { ChatInputCommandInteraction, MessageFlags } from "discord.js";
 import User from "../../models/User";
 import { BotClient } from "../../types";
 
-const dailyAmount = 1000;
+// Function to generate random amount between 1001 and 1999 (excluding 1000 and 2000)
+const getRandomDailyAmount = (): number => {
+  return Math.floor(Math.random() * 999) + 1001; // Random number from 1001 to 1999
+};
 
 export default {
   name: "daily",
@@ -29,6 +32,7 @@ export default {
       };
 
       let user = await User.findOne(query);
+      const dailyAmount = getRandomDailyAmount();
 
       if (user) {
         const lastDailyDate = user.LastDaily
@@ -43,20 +47,23 @@ export default {
           );
           return;
         }
+
+        // Update existing user
+        user.LastDaily = new Date();
+        user.balance += dailyAmount;
+        await user.save();
       } else {
+        // Create new user with daily amount
         user = new User({
           ...query,
-          LastDaily: new Date(), // setting the new date after the user ran the command
+          balance: dailyAmount,
+          LastDaily: new Date(),
         });
+        await user.save();
       }
 
-      // Update the LastDaily field to the current date
-      user.LastDaily = new Date();
-      user.balance += dailyAmount;
-      await user.save();
-
       await interaction.editReply(
-        `${dailyAmount} was added to your balance. Your new balance is ${user.balance}`
+        `🎁 ${dailyAmount} credits were added to your balance! Your new balance is ${user.balance}`
       );
     } catch (error) {
       console.log(`Error with /daily: ${error}`);

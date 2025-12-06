@@ -50,24 +50,21 @@ export default async function giveUserXp(
         console.log(`error saving updated level ${e}`);
         return;
       });
-      cooldowns.add(message.author.id);
-      setTimeout(() => {
-        cooldowns.delete(message.author.id);
-      }, 30000);
     } else {
-      // Create new level
+      // Create new level with proper structure
       const newLevel = new Level({
-        userId: message.author.id,
-        guildId: message.guild?.id,
+        ...query,
         xp: xpToGive,
+        level: 0,
       });
 
       await newLevel.save();
-      cooldowns.add(message.author.id);
-      setTimeout(() => {
-        cooldowns.delete(message.author.id);
-      }, 30000);
     }
+
+    cooldowns.add(message.author.id);
+    setTimeout(() => {
+      cooldowns.delete(message.author.id);
+    }, 30000);
   } catch (error) {
     console.log(`Error giving xp: ${error}`);
   }

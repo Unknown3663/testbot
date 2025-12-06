@@ -26,4 +26,7 @@ const userSchema = new Schema<IUser>({
   },
 });
 
+// Create compound unique index to prevent duplicate user entries per guild
+userSchema.index({ userId: 1, guildId: 1 }, { unique: true });
+
 export default model<IUser>("User", userSchema);

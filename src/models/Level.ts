@@ -26,4 +26,7 @@ const levelSchema = new Schema<ILevel>({
   },
 });
 
+// Create compound unique index to prevent duplicate level entries per guild
+levelSchema.index({ userId: 1, guildId: 1 }, { unique: true });
+
 export default model<ILevel>("Level", levelSchema);

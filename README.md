@@ -1,173 +1,106 @@
-# 🤖 TestBot - Discord.js Learning Project
+# 🤖 TestBot — Discord.js Playground
 
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![Discord.js](https://img.shields.io/badge/Discord.js-14.19.3-blue.svg)](https://discord.js.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green.svg)](https://www.mongodb.com/)
-[![License](https://img.shields.io/badge/License-ISC-yellow.svg)](LICENSE)
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Discord.js-14.25.1-5865F2?logo=discord&logoColor=white" alt="Discord.js" />
+  <img src="https://img.shields.io/badge/Mongoose-9.0.1-880000?logo=mongoose&logoColor=white" alt="Mongoose" />
+  <img src="https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/License-ISC-yellow" alt="License" />
+</p>
 
-> A feature-rich Discord bot built with Discord.js v14 for learning and experimentation purposes. This bot includes moderation tools, economy system, leveling, and administrative features.
+> A feature-rich Discord bot for learning and experimentation. Includes moderation, economy games, leveling, and admin tooling — now updated to the latest deps and interactive UIs.
 
-## ✨ Features
+---
 
-### 🛡️ Moderation Commands
+## ✨ Highlights
 
-- **Ban/Kick** - Remove problematic users from your server
-- **Timeout** - Temporarily restrict user permissions
-- **Warn/Clear Warnings** - Track and manage user warnings
-- **Slowmode** - Control message frequency in channels
-- **Clear Messages** - Bulk delete messages
+- 🛡️ **Moderation**: ban, kick, timeout, warn/clear warnings, slowmode, bulk clear
+- 💰 **Economy**: daily credits (1,001–1,999), balances, interactive mini-games
+- 🎮 **Games**: Rock-Paper-Scissors with buttons, Russian Roulette (dramatic delay), Dice (high/low/middle), Number Guess (5 attempts with hints)
+- 📊 **Leveling**: XP per message (5–15), level-ups with announcements, leaderboards
+- ⚙️ **Admin**: auto-role configure/disable with safety checks
+- 🛠️ **Utility**: ping, warnings view
 
-### 💰 Economy System
+## 🔥 Game Details
 
-- **Daily Rewards** - Collect daily coins (1000 per day)
-- **Balance Tracking** - View user balances across servers
-- **MongoDB Integration** - Persistent data storage
-
-### 📊 Leveling System
-
-- **XP Tracking** - Users gain XP by chatting (5-15 XP per message)
-- **Level Cards** - Beautiful rank cards with user stats
-- **Leaderboards** - Server-wide ranking system
-- **Custom Card Backgrounds** - Personalized level displays
-
-### ⚙️ Administrative Tools
-
-- **Auto-Role** - Automatically assign roles to new members
-- **Permission Checks** - Role-based command restrictions
-- **Server Configuration** - Guild-specific settings
-
-### 🎯 Utility Commands
-
-- **Ping** - Check bot latency and response time
-- **User Warnings** - View warning history for any user
+- **/daily**: Random credits from 1,001 to 1,999; one claim per day
+- **/rps**: Bet + choose via buttons; win/lose/tie updates balance
+- **/roulette**: Russian roulette with 6 chambers, bullet chance, 2s suspense, cash-out option, 30% gain per safe pull
+- **/dice**: Predict high/low/middle; middle pays 5:1
+- **/guess**: 5 chat attempts; hints higher/lower; 3x payout on success; bet deducted up front
 
 ## 🚀 Quick Start
 
-### Prerequisites
+1. **Install**
 
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [MongoDB Atlas](https://www.mongodb.com/) account
-- Discord Bot Token
+```bash
+git clone https://github.com/yourusername/testbot.git
+cd testbot
+npm install
+```
 
-### Installation
+2. **Env** — create `.env`
 
-1. **Clone the repository**
+```env
+TOKEN=your_discord_bot_token
+MONGODB_URI=your_mongodb_connection_string
+```
 
-   ```bash
-   git clone https://github.com/yourusername/testbot.git
-   cd testbot
-   ```
+3. **Config** — edit [`config.json`](config.json)
 
-2. **Install dependencies**
+```json
+{
+  "testServer": "your_test_server_id",
+  "clientid": "your_bot_client_id",
+  "devs": ["your_discord_user_id"]
+}
+```
 
-   ```bash
-   npm install
-   ```
+4. **Run**
 
-3. **Environment Setup**
-   Create a `.env` file in the root directory:
+```bash
+npm run build
+npm run start   # or npm run dev for nodemon
+```
 
-   ```env
-   TOKEN=your_discord_bot_token
-   MONGODB_URI=your_mongodb_connection_string
-   ```
-
-4. **Configure the bot**
-   Update [`config.json`](config.json) with your settings:
-
-   ```json
-   {
-     "testServer": "your_test_server_id",
-     "clientid": "your_bot_client_id",
-     "devs": ["your_discord_user_id"]
-   }
-   ```
-
-5. **Start the bot**
-   ```bash
-   node src/index.js
-   ```
-
-## 📁 Project Structure
+## 📁 Structure
 
 ```
 testbot/
 ├── src/
-│   ├── commands/          # Slash commands organized by category
-│   │   ├── admin/         # Administrative commands
-│   │   ├── community/     # Community features
-│   │   ├── economy/       # Economy system commands
-│   │   ├── misc/          # Utility commands
-│   │   └── moderation/    # Moderation tools
+│   ├── commands/          # Slash commands (admin, community, economy, misc, moderation)
 │   ├── events/            # Discord event handlers
-│   │   ├── guildMemberAdd/
-│   │   ├── interactionCreate/
-│   │   ├── messageCreate/
-│   │   └── ready/
-│   ├── handlers/          # Event and command handlers
-│   ├── models/            # MongoDB schemas
-│   ├── utils/             # Utility functions
-│   └── index.js           # Main bot file
-├── images/                # Bot assets and backgrounds
-├── config.json            # Bot configuration
-└── package.json           # Dependencies and scripts
+│   ├── handlers/          # Event/command wiring
+│   ├── models/            # Mongoose schemas (User, Level, AutoRole, Warn)
+│   ├── utils/             # Helpers (commands loader, diffing, etc.)
+│   └── index.js           # Entry point (built to dist/)
+├── images/                # Assets/backgrounds
+├── config.json            # Bot config
+└── package.json           # Scripts & deps
 ```
 
-## 🔧 Available Commands
+## 🛠️ Tech Stack
 
-| Category       | Command               | Description                 |
-| -------------- | --------------------- | --------------------------- |
-| **Moderation** | `/ban`                | Ban a user from the server  |
-|                | `/kick`               | Kick a user from the server |
-|                | `/timeout`            | Timeout a user temporarily  |
-|                | `/warn`               | Warn a user                 |
-|                | `/clearwarn`          | Clear user warnings         |
-|                | `/slowmode`           | Set channel slowmode        |
-|                | `/clear`              | Bulk delete messages        |
-| **Economy**    | `/daily`              | Collect daily rewards       |
-|                | `/balance`            | Check user balance          |
-|                | `/level`              | View level information      |
-| **Admin**      | `/autorole-configure` | Set up auto-role            |
-|                | `/autorole-disable`   | Disable auto-role           |
-| **Community**  | `/warnings`           | View user warnings          |
-| **Misc**       | `/ping`               | Check bot latency           |
+- Discord.js 14 • Node 18+ • TypeScript 5.9
+- MongoDB + Mongoose 9.0.1
+- Canvacord 6.0.4 for rank cards
+- Nodemon for dev, rimraf/tsc for builds
 
-## 🛠️ Technologies Used
+## 📈 Data Models
 
-- **[Discord.js v14](https://discord.js.org/)** - Discord API wrapper
-- **[MongoDB](https://www.mongodb.com/)** - Database for persistent storage
-- **[Mongoose](https://mongoosejs.com/)** - MongoDB object modeling
-- **[Canvacord](https://canvacord.js.org/)** - Canvas-based image generation
-- **[Node.js](https://nodejs.org/)** - JavaScript runtime
-
-## 📈 Database Models
-
-The bot uses MongoDB with the following schemas:
-
-- **[`User`](src/models/User.js)** - Economy and user data
-- **[`Level`](src/models/Level.js)** - XP and leveling system
-- **[`AutoRole`](src/models/AutoRole.js)** - Server auto-role configurations
-- **[`warnSchema`](src/models/warnSchema.js)** - User warning tracking
+- `User` — balances, last daily
+- `Level` — xp, level per guild
+- `AutoRole` — auto-role per guild
+- `warnSchema` — user warnings
 
 ## 🤝 Contributing
 
-This is a learning project, but contributions are welcome! Feel free to:
-
-- Report bugs
-- Suggest new features
-- Submit pull requests
-- Improve documentation
+PRs and ideas welcome — this is a learning sandbox. Open an issue or submit a PR to improve commands, games, or docs.
 
 ## 📝 License
 
-This project is licensed under the ISC License.
-
-## ⚠️ Disclaimer
-
-This bot is created for educational and testing purposes. It's not intended for production use without proper security audits and optimizations.
+ISC License.
 
 ---
 
-<div align="center">
-  <strong>Built with ❤️ for learning Discord.js</strong>
-</div>
+<p align="center"><strong>Built with ❤️ for learning Discord.js</strong></p>

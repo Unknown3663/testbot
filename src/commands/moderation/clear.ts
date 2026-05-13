@@ -22,7 +22,7 @@ interface Command {
   }>;
   callback: (
     client: Client,
-    interaction: ChatInputCommandInteraction
+    interaction: ChatInputCommandInteraction,
   ) => Promise<void>;
 }
 
@@ -47,7 +47,7 @@ const command: Command = {
    */
   callback: async (
     client: Client,
-    interaction: ChatInputCommandInteraction
+    interaction: ChatInputCommandInteraction,
   ): Promise<void> => {
     const amount = interaction.options.get("amount")?.value as number;
     const channel = interaction.channel as TextChannel;
@@ -57,7 +57,7 @@ const command: Command = {
       !interaction.member?.permissions ||
       typeof interaction.member.permissions === "string" ||
       !interaction.member.permissions.has(
-        PermissionsBitField.Flags.ManageMessages
+        PermissionsBitField.Flags.ManageMessages,
       )
     ) {
       await interaction.reply({
@@ -70,7 +70,7 @@ const command: Command = {
     // Check if bot has permission
     if (
       !interaction.guild?.members?.me?.permissions?.has(
-        PermissionsBitField.Flags.ManageMessages
+        PermissionsBitField.Flags.ManageMessages,
       )
     ) {
       await interaction.reply({
@@ -97,26 +97,41 @@ const command: Command = {
     }
 
     try {
-      await channel.bulkDelete(amount);
-    } catch (error) {
-      console.log(`there was an error clearing the msgs: ${error}`);
-      await interaction.reply({
-        content:
-          "There was an error deleting the messages. Make sure the messages aren't older than 14 days.",
-        flags: MessageFlags.Ephemeral,
-      });
-      return;
-    }
+      const messages = await channel.messages.fetch({ limit: amount });
+      const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
+      const validMessages = messages.filter(
+        (msg) => msg.createdTimestamp > fourteenDaysAgo,
+      );
 
-    try {
+      if (validMessages.size === 0) {
+        await interaction.reply({
+          content:
+            "No messages were cleared. All selected messages were older than 14 days.",
+          flags: MessageFlags.Ephemeral,
+        });
+        return;
+      }
+
+      await channel.bulkDelete(validMessages);
+
+      const skipped = amount - validMessages.size;
       const embed = new EmbedBuilder()
         .setTitle("Message Clearing")
-        .setDescription(`Successfully cleared ${amount} messages.`)
+        .setDescription(
+          `Successfully cleared ${validMessages.size} messages.` +
+            (skipped > 0
+              ? `\n\n*Note: ${skipped} message(s) could not be cleared because they were older than 14 days.*`
+              : ""),
+        )
         .setColor("Blue");
 
       await interaction.reply({ embeds: [embed] });
     } catch (error) {
-      console.log(`there was an error making the embed: ${error}`);
+      console.log(`there was an error clearing the msgs: ${error}`);
+      await interaction.reply({
+        content: "There was an error while trying to delete the messages.",
+        flags: MessageFlags.Ephemeral,
+      });
     }
   },
 };

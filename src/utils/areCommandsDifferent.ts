@@ -32,7 +32,7 @@ export default function areCommandsDifferent(
   ): boolean => {
     for (const localChoice of localChoices) {
       const existingChoice = existingChoices?.find(
-        (choice) => choice.name === localChoice.name
+        (choice) => choice.name === localChoice.name || choice.name === localChoice.name.replace(/\uFE0F/g, '')
       );
 
       if (!existingChoice) {

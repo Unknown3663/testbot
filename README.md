@@ -1,52 +1,52 @@
-# 🤖 TestBot — Discord.js Playground
+# TestBot
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/Discord.js-14.25.1-5865F2?logo=discord&logoColor=white" alt="Discord.js" />
-  <img src="https://img.shields.io/badge/Mongoose-9.0.1-880000?logo=mongoose&logoColor=white" alt="Mongoose" />
-  <img src="https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/License-ISC-yellow" alt="License" />
-</p>
+Discord.js v14 bot written in TypeScript and run with Bun. The project includes guild-scoped slash command registration, MongoDB-backed economy and leveling data, moderation tools, warning records, auto-role setup, and several credit-based games.
 
-> A feature-rich Discord bot for learning and experimentation. Includes moderation, economy games, leveling, and admin tooling — now updated to the latest deps and interactive UIs.
+## Tech Stack
 
----
+- Bun runtime and package manager
+- TypeScript 6
+- Discord.js 14
+- MongoDB with Mongoose 9
+- Canvacord for rank card generation
 
-## ✨ Highlights
+## Features
 
-- 🛡️ **Moderation**: ban, kick, timeout, warn/clear warnings, slowmode, bulk clear
-- 💰 **Economy**: daily credits (1,001–1,999), balances, interactive mini-games
-- 🎮 **Games**: Rock-Paper-Scissors with buttons, Russian Roulette (dramatic delay), Dice (high/low/middle), Number Guess (5 attempts with hints)
-- 📊 **Leveling**: XP per message (5–15), level-ups with announcements, leaderboards
-- ⚙️ **Admin**: auto-role configure/disable with safety checks
-- 🛠️ **Utility**: ping, warnings view
+- Slash commands auto-register against the configured test server on startup.
+- Economy profiles store per-guild balances and daily claim timestamps.
+- Games use credits: rock-paper-scissors, dice, number guessing, and Russian roulette.
+- Leveling grants 5-15 XP per message with a 30 second per-user cooldown.
+- Rank cards render with Canvacord using `images/CardBackGround.png`.
+- Moderation commands cover ban, kick, timeout, slowmode, bulk clear, warn, and clear warnings.
+- Auto-role assigns a configured role when a member joins, with permission and role hierarchy checks.
 
-## 🔥 Game Details
+## Requirements
 
-- **/daily**: Random credits from 1,001 to 1,999; one claim per day
-- **/rps**: Bet + choose via buttons; win/lose/tie updates balance
-- **/roulette**: Russian roulette with 6 chambers, bullet chance, 2s suspense, cash-out option, 30% gain per safe pull
-- **/dice**: Predict high/low/middle; middle pays 5:1
-- **/guess**: 5 chat attempts; hints higher/lower; 3x payout on success; bet deducted up front
+- Bun installed locally
+- MongoDB connection string
+- Discord application and bot token
+- A Discord test server ID for command registration
+- Bot gateway intents enabled in Discord Developer Portal:
+  - Server Members Intent
+  - Message Content Intent
+  - Presence Intent, used for rank card status display
 
-## 🚀 Quick Start
+## Setup
 
-1. **Install**
+Install dependencies:
 
 ```bash
-git clone https://github.com/yourusername/testbot.git
-cd testbot
-npm install
+bun install
 ```
 
-2. **Env** — create `.env`
+Create `.env`:
 
 ```env
 TOKEN=your_discord_bot_token
 MONGODB_URI=your_mongodb_connection_string
 ```
 
-3. **Config** — edit [`config.json`](config.json)
+Update `config.json`:
 
 ```json
 {
@@ -56,51 +56,80 @@ MONGODB_URI=your_mongodb_connection_string
 }
 ```
 
-4. **Run**
+`testServer` controls where slash commands are registered. Commands are synced on the `clientReady` event, so changes in `src/commands` are registered after restart.
+
+## Scripts
 
 ```bash
-npm run build
-npm run start   # or npm run dev for nodemon
+bun run dev      # run src/index.ts with Bun hot reload
+bun run build    # compile TypeScript into dist/
+bun run start    # run dist/index.js
+bun run clean    # remove dist/
 ```
 
-## 📁 Structure
+`bun run test` is still a placeholder and exits with an error.
 
+## Commands
+
+| Command | Purpose |
+| --- | --- |
+| `/ping` | Shows interaction latency and websocket ping. |
+| `/daily` | Claims 1,001-1,999 credits once per calendar day. |
+| `/balance [user]` | Shows your balance or another user's balance. |
+| `/level [target-user]` | Generates a rank card for you or another member. |
+| `/rps <bet>` | Rock-paper-scissors with buttons. Bets must be 10-200 credits. |
+| `/dice <bet> <prediction>` | Rolls two dice. High/low pays even profit; middle pays 5x profit. Bets must be 10-200 credits. |
+| `/guess <bet>` | Guess a number from 1-100 in 5 attempts within 2 minutes. Win pays 3x the bet. Bets must be 10-200 credits. |
+| `/roulette <bet>` | Button-based risk game with cash out. Safe pulls add 30% of the original bet. Bets must be 10-200 credits. |
+| `/warnings <user>` | Shows warning records for a user. |
+| `/warn <user> [reason]` | Adds a warning and attempts to DM the warned user. Requires Kick Members. |
+| `/clearwarn <user>` | Removes all warning records for a user. Requires Kick Members. |
+| `/clear <amount>` | Bulk-deletes 1-100 recent messages, skipping messages older than 14 days. Requires Manage Messages. |
+| `/kick <target-user> [reason]` | Kicks a server member with role hierarchy checks. Requires Kick Members. |
+| `/ban <target-user> [reason]` | Bans by mention or Discord user ID, including users not currently in the server. Requires Ban Members. |
+| `/timeout <target-user> <duration> [reason]` | Times out or updates timeout. Supports `s`, `m`, `h`, and `d`; Discord limit is 5 seconds to 28 days. Requires Moderate Members. |
+| `/slowmode <duration>` | Sets channel slowmode from `0s` to `6h`. Requires Manage Channels. |
+| `/autorole-configure <role>` | Stores the role assigned to new members. Requires Manage Roles and bot Manage Roles. |
+| `/autorole-disable` | Removes the stored auto-role for the server. Requires Manage Roles. |
+
+## Project Layout
+
+```text
+src/
+  commands/
+    admin/        # auto-role configuration
+    community/    # warnings lookup
+    economy/      # balance, daily, level, credit games
+    misc/         # ping
+    moderation/   # ban, kick, timeout, slowmode, clear, warnings
+  events/
+    clientReady/        # slash command sync
+    guildMemberAdd/     # auto-role assignment
+    interactionCreate/  # command dispatch
+    messageCreate/      # XP and message counting
+  handlers/       # event loader
+  models/         # Mongoose models
+  utils/          # file loading, command diffing, XP math
+images/           # rank card assets
+config.json       # guild/app/developer IDs
 ```
-testbot/
-├── src/
-│   ├── commands/          # Slash commands (admin, community, economy, misc, moderation)
-│   ├── events/            # Discord event handlers
-│   ├── handlers/          # Event/command wiring
-│   ├── models/            # Mongoose schemas (User, Level, AutoRole, Warn)
-│   ├── utils/             # Helpers (commands loader, diffing, etc.)
-│   └── index.js           # Entry point (built to dist/)
-├── images/                # Assets/backgrounds
-├── config.json            # Bot config
-└── package.json           # Scripts & deps
-```
 
-## 🛠️ Tech Stack
+## Data Models
 
-- Discord.js 14 • Node 18+ • TypeScript 5.9
-- MongoDB + Mongoose 9.0.1
-- Canvacord 6.0.4 for rank cards
-- Nodemon for dev, rimraf/tsc for builds
+- `User`: `userId`, `guildId`, `balance`, `LastDaily`
+- `Level`: `userId`, `guildId`, `xp`, `level`
+- `AutoRole`: `guildId`, `roleId`
+- `warnSchema`: `GuildID`, `UserID`, `UserTag`, `Content`
 
-## 📈 Data Models
+`User` and `Level` use compound indexes on `userId` and `guildId` to keep profiles scoped per server.
 
-- `User` — balances, last daily
-- `Level` — xp, level per guild
-- `AutoRole` — auto-role per guild
-- `warnSchema` — user warnings
+## Operational Notes
 
-## 🤝 Contributing
+- Moderation permission checks are implemented inside each command callback.
+- Guild command sync compares local command definitions with Discord commands and edits changed descriptions/options.
+- `messageCreate/countMessages.ts` increments an in-memory counter, but the interval function is not currently invoked.
+- Generated build output lives in `dist/` and is ignored by Git.
 
-PRs and ideas welcome — this is a learning sandbox. Open an issue or submit a PR to improve commands, games, or docs.
+## License
 
-## 📝 License
-
-ISC License.
-
----
-
-<p align="center"><strong>Built with ❤️ for learning Discord.js</strong></p>
+ISC
